@@ -44,6 +44,7 @@ const handleValidation=(req)=> {
         if(validationErrors.isEmpty() === false) {
             return {
                 success: false, 
+                error: true,
                 timestamp: Date.now(), 
                 message: validationErrors.array(), 
                 data: null}

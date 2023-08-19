@@ -5,15 +5,15 @@ const Schema = mongoose.Schema
 const categorySchema = new Schema({
     banner: {
         type: String,
-        required: true
+    },
+    seo: {
+        type: String,
     },
     character: {
         type: String,
-        required: true,
     },
     name: {
         type: String,
-        required: true,
     },
     game: [{
         type: Schema.Types.ObjectId,

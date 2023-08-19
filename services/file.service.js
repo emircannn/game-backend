@@ -1,0 +1,19 @@
+const upload = require('../middleware/singlefileupload.middleware')
+const multer = require('multer');
+
+exports.uploadFile = (req, res) => {
+    return new Promise((resolve, reject) => {
+        upload(req, res, async (err) => {
+            if (err instanceof multer.MulterError) {
+                reject(err);
+            } else if (err) {
+                reject(err);
+            }
+            const ip = process.env.DOMAIN
+            const filePath = process.env.FILE_PATH
+            const fileName = req.file.filename
+            const fileString = `${ip}${process.env.PORT}${filePath}${fileName}`
+            resolve(fileString)
+        })
+    })
+};

@@ -5,31 +5,27 @@ const Schema = mongoose.Schema
 const gameSchema = new Schema({
     name: {
         type: String,
-        required: true
     },
     banner: {
         type: String,
-        required: true
     },
     coverImage: {
         type: String,
-        required: true
+    },
+    seo: {
+        type: String,
     },
     releaseDate: {
         type: Date,
-        required: true
     },
     developer: {
         type: String,
-        required: true
     },
     stok: {
         type: Number,
-        required: true
     },
     price: {
         type: Number,
-        required: true
     },
     category: {
         type: Schema.Types.ObjectId,
@@ -37,19 +33,15 @@ const gameSchema = new Schema({
     },
     platform: {
         type: String,
-        required: true
     },
     youtubeLink: {
         type: String,
-        required: true
     },
     images: {
         type: Array,
-        required: true
     },
     desc: {
         type: String,
-        required: true
     },
     similarGames: [{
         type: Schema.Types.ObjectId,
