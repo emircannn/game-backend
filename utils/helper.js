@@ -12,6 +12,25 @@ const createUploadDir = (str) => {
     }
 }
 
+const convertToSEOText = (text) => {
+    if (!text) return '';
+  
+    // Türkçe karakterleri SEO dostu karakterlere dönüştür
+    text = text
+      .toLowerCase()
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/[^a-z0-9\s]/g, '') // Alphanumeric ve boşlukları koru
+      .replace(/\s+/g, '_'); // Boşlukları _ ile değiştir
+  
+    return text;
+  }
+
+
 const getHost = () => {
     return new Promise((resolve, reject) => {
         dns.lookup(os.hostname(), (err, ip) => {
@@ -71,5 +90,6 @@ module.exports = {
     createUploadDir,
     getHost,
     handleValidation,
-    deleteFromDisk
+    deleteFromDisk,
+    convertToSEOText
 }

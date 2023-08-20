@@ -8,6 +8,7 @@ const middleware = require('./middleware/index')
 const consts = require('./consts/index')
 const router = require('./router/index')
 const utils = require('./utils/index')
+const bodyParser = require('body-parser');
 
 configs.serverConfig.initialServerConfig()
 const PORT = process.env.PORT
@@ -16,13 +17,16 @@ utils.helpers.createUploadDir('./uploads')
 
 app.use('/uploads', express.static('uploads'))
 
-app.use(express.json())
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 app.use(helmet())
 app.use(cors())
+
 
 app.use(middleware.loggerMiddleware)
 
 app.use(`${process.env.APP_PREFIX}${consts.router.USER}`, router.userRouter.user)
+app.use(`${process.env.APP_PREFIX}${consts.router.CATEGORY}`, router.categoryRouter.category)
 
 connectToMongoDb(
     process.env.DATABASE_URL,
