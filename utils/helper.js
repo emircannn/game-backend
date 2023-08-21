@@ -85,6 +85,35 @@ const deleteFromDisk=(fileName)=> {
     return true
 }
 
+const deleteManyFromDisk = (images) => {
+    let success = true;
+
+    const fileNames = images.map((url) => {
+      const parts = url.split("uploads/");
+      return parts.length === 2 ? parts[1] : null;
+    }).filter((fileName) => fileName !== null);
+  
+    if (Array.isArray(fileNames)) {
+      fileNames.forEach((fileName) => {
+        if (fileName && fs.existsSync(`uploads/${fileName}`)) {
+          fs.unlinkSync(`uploads/${fileName}`, (err) => {
+            if (err) {
+              console.error(`Dosya silinemedi: ${fileName}`);
+              success = false;
+            } else {
+              console.log(`Dosya başarıyla silindi: ${fileName}`);
+            }
+          });
+        }
+      });
+    } else {
+      console.error('Geçersiz dosya adları dizisi.');
+      success = false;
+    }
+  
+    return success;
+  };
+
 const filenameConverter = (fileName) => {
 
     if(!fileName) {
@@ -116,5 +145,6 @@ module.exports = {
     deleteFromDisk,
     convertToSEOText,
     filenameConverter,
-    filenameManyConverter
+    filenameManyConverter,
+    deleteManyFromDisk
 }

@@ -27,6 +27,7 @@ app.use(middleware.loggerMiddleware)
 
 app.use(`${process.env.APP_PREFIX}${consts.router.USER}`, router.userRouter.user)
 app.use(`${process.env.APP_PREFIX}${consts.router.CATEGORY}`, router.categoryRouter.category)
+app.use(`${process.env.APP_PREFIX}${consts.router.GAME}`, router.gameRouter.game)
 
 connectToMongoDb(
     process.env.DATABASE_URL,

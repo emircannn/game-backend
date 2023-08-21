@@ -11,6 +11,7 @@ exports.getAll= async ()=>{
         throw new Error(error)
     }
 }
+
 exports.getBySeo= async (req)=>{
     try {
         const {seo} = req.query

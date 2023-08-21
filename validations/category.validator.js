@@ -8,7 +8,7 @@ const CategoryValidator = {
         return [query('id').isMongoId()]
     },
     validateSeo () {
-        return [query('seo').isMongoId()]
+        return [query('seo').isString()]
     },
 }
 

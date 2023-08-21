@@ -6,7 +6,7 @@ const gameSchema = new Schema({
     name: {
         type: String,
     },
-    banner: {
+    bannerImage: {
         type: String,
     },
     coverImage: {
@@ -16,7 +16,7 @@ const gameSchema = new Schema({
         type: String,
     },
     releaseDate: {
-        type: Date,
+        type: String,
     },
     developer: {
         type: String,
