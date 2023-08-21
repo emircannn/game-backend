@@ -38,9 +38,9 @@ exports.createUser= async (req)=>{
 
 exports.findUser= async (req)=>{
     try {
-        const {username} = req.params
+        const {userName} = req.params
 
-        const json = await userDal.findUserbyUsername(username)
+        const json = await userDal.findUserbyUsername(userName)
         return json
 
     } catch (error) {

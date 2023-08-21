@@ -1,4 +1,4 @@
-const upload = require('../middleware/singlefileupload.middleware')
+const {upload} = require('../middleware/fileupload.middleware')
 const multer = require('multer');
 
 exports.uploadFile = (req, res) => {

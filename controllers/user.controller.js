@@ -59,7 +59,7 @@ exports.updateByUsername= async (req,res)=> {
 exports.getAll= async (req,res)=> {
     try {
 
-        const json = await userService.getAll(req)
+        const json = await userService.getAll()
         res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem Başarılı"})
 
     } catch (error) {

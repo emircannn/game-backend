@@ -15,7 +15,7 @@ const UserDataAccess = {
         return await User.updateOne({username: userName}, {name,username,steamLink, eaLink,ubisoftLink,youtubeLink,twitchLink,discordLink,password:hassedPassword,email})
     },
     async getAllUsers() {
-        return await User.find({})
+        return await User.find()
     },
 
 }

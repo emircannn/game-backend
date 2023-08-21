@@ -1,9 +1,9 @@
 const authMiddleware = require('./auth.middleware');
 const loggerMiddleware = require('./logger.middleware');
-const singlefileuploadMiddleware = require('./singlefileupload.middleware')
+const fileuploadMiddleware = require('./fileupload.middleware')
 
 module.exports = {
     loggerMiddleware,
     authMiddleware,
-    singlefileuploadMiddleware
+    fileuploadMiddleware
 }

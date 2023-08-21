@@ -23,6 +23,7 @@ const gameSchema = new Schema({
     },
     stok: {
         type: Number,
+        default: 1
     },
     price: {
         type: Number,
