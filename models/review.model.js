@@ -5,11 +5,9 @@ const Schema = mongoose.Schema
 const reviewSchema = new Schema({
     rate: {
         type: Number,
-        required: true
     },
     review: {
         type: String,
-        required: true,
     },
     user: {
         type: Schema.Types.ObjectId,
@@ -32,6 +30,47 @@ const reviewSchema = new Schema({
     timestamps: true,
     autoIndex: true
 })
+
+reviewSchema.post("save", async function (doc) {
+    const gameId = doc.game;
+    const avgRating = await mongoose.model("Review").aggregate([
+      {
+        $match: { game: gameId },
+      },
+      {
+        $group: {
+          _id: "$game",
+          avgRating: { $avg: "$rate" },
+        },
+      },
+    ]);
+  
+    await mongoose.model("Game").updateOne(
+      { _id: gameId },
+      { $set: { rating: avgRating[0].avgRating } }
+    );
+  });
+
+
+  reviewSchema.post("findOneAndDelete", async function (doc) {
+    const gameId = doc.game;
+    const avgRating = await mongoose.model("Review").aggregate([
+      {
+        $match: { game: gameId },
+      },
+      {
+        $group: {
+          _id: "$game",
+          avgRating: { $avg: "$rate" },
+        },
+      },
+    ]);
+  
+    await mongoose.model("Game").updateOne(
+      { _id: gameId },
+      { $set: { rating: avgRating[0].avgRating } }
+    );
+  });
 
 const Review = mongoose.model('Review', reviewSchema, 'review')
 

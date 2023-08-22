@@ -11,6 +11,7 @@ exports.getAll = async () => {
         throw new Error
     }
 };
+
 exports.getBySeo = async (req) => {
     try {
         const {seo} = req.query
@@ -60,6 +61,49 @@ exports.createGame = async (req) => {
     }
 };
 
+exports.updateGame = async (req) => {
+    try {
+        const {
+            name, platform, discountRate,
+            releaseDate, youtubeLink, discountDate,
+            developer, desc, preOrderDate,
+            stok, similarGames,
+            price, minimumSystemRequirements,
+            category,recommendedSystemRequirements
+        } = req.body;
+
+        const {seoName} = req.query
+
+        const discountPrice = discountRate && price ? price - (price * discountRate/100) : undefined
+        const seo = name ? convertToSEOText(name) : undefined
+
+        const game ={
+            name, platform, discountRate,
+            releaseDate, youtubeLink, discountDate,
+            developer, desc, preOrderDate,
+            stok, similarGames,discountPrice,
+            price, minimumSystemRequirements,seo,
+            category,recommendedSystemRequirements
+        }
+
+        const isUseName = await Game.findOne({name})
+        const isUseSeo = await Game.findOne({seo})
+
+        if(isUseName && isUseSeo) {
+            throw new Error('Bu isim halihazırda kullanımda')
+        }
+
+        const json = await gameDal.update(game,seoName)
+        if(category) {
+            Category.findByIdAndUpdate({_id: category},{ $push: { game: json._id }})
+        }
+        return json
+
+    } catch (error) {
+        throw new Error(error.message)
+    }
+};
+
 exports.uploadImage= async (req)=>{
     try {
         const {seo, youtubeLink} = req.query
@@ -83,3 +127,19 @@ exports.uploadImage= async (req)=>{
         throw new Error(error)
     }
 }
+
+exports.deleteGame = async (req) => {
+    try {
+        const {id} = req.query
+
+        const findedGame = await Game.findById({_id: id})
+
+        Category.findByIdAndUpdate({_id: findedGame._id},{ $pull: { game: id }})
+        const json = await gameDal.delete(id)
+
+        return json
+
+    } catch (error) {
+        throw new Error(error.message)
+    }
+};

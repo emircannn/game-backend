@@ -68,7 +68,6 @@ exports.getAll= async (req,res)=> {
     }
 }
 
-
 exports.updateImage= async(req,res)=> {
     try {
         const isInvalid = utils.helpers.handleValidation(req)
