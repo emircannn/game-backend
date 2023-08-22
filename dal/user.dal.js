@@ -17,7 +17,15 @@ const UserDataAccess = {
     async getAllUsers() {
         return await User.find()
     },
-
+    async addWishlist(username,wishlist) {
+        return await User.findOneAndUpdate({username}, { $push: { wishlist: wishlist }})
+    },
+    async deleteWishlist(username,wishlist) {
+        return await User.findOneAndUpdate({username}, { $pull: { wishlist: wishlist }})
+    },
+    async getWishlist(username) {
+        return await User.findOne({username}).select('wishlist').populate({path: "wishlist", select: "_id name seo discountPrice coverImage bannerImage discountRate price"})
+    },
 }
 
 module.exports = UserDataAccess

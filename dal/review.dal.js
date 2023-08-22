@@ -4,7 +4,7 @@ const Game = require('../models/game.model')
 const ReviewDataAccess = {
     async getAll() {
         return await Review.find()
-        .populate({path: "game", select: "_id name seo rating coverImage bannerImage rating"})
+        .populate({path: "game", select: "_id name seo rating coverImage bannerImage"})
         .populate({path: "user", select: "_id name username image"})
     },
     async create(review) {
@@ -16,7 +16,7 @@ const ReviewDataAccess = {
             throw new Error("Oyun bulunamadı");
           }
         return await Review.find({game :findedGame._id})
-        .populate({path: "game", select: "_id name seo rating coverImage bannerImage rating"})
+        .populate({path: "game", select: "_id name seo rating coverImage bannerImage"})
         .populate({path: "user", select: "_id name username image"})
     },
     async delete(id) {

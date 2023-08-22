@@ -103,3 +103,63 @@ exports.updateImage= async (req, res)=>{
         throw new Error(error)
     }
 }
+
+exports.addWishlist= async (req)=>{
+    try {
+        const {username} = req.query
+        const {wishlist} = req.body
+
+        const findedUser = await User.findOne({username})
+
+        if(!findedUser) {
+            throw new Error('Böyle bir kullanıcı mevcut değil')
+        }
+
+        if(findedUser.wishlist.includes(wishlist)) {
+            throw new Error('Bu oyun zaten istek listenizde')
+        }
+
+        const json = await userDal.addWishlist(username,wishlist)
+        return json
+
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.deleteWishlist= async (req)=>{
+    try {
+        const {username} = req.query
+        const {wishlist} = req.body
+
+        const findedUser = await User.findOne({username})
+
+        if(!findedUser) {
+            throw new Error('Böyle bir kullanıcı mevcut değil')
+        }
+
+        if(!findedUser.wishlist.includes(wishlist)) {
+            throw new Error('Bu oyun zaten istek listenizde değil')
+        }
+
+        const json = await userDal.deleteWishlist(username,wishlist)
+        return json
+
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.getWishlist= async (req)=>{
+    try {
+        const {username} = req.query
+
+        const json = await userDal.getWishlist(username)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}

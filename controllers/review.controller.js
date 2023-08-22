@@ -16,6 +16,15 @@ exports.getAll= async (req,res)=> {
 
 exports.create= async (req,res)=> {
     try {
+
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, ...isInvalid})
+            return
+        }
+
+
         const json = await reviewService.create(req)
         res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Değerlendirme başarılı."})
 
@@ -38,6 +47,15 @@ exports.getWithSeo= async (req,res)=> {
 
 exports.delete= async (req,res)=> {
     try {
+
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, ...isInvalid})
+            return
+        }
+
+
         const json = await reviewService.delete(req)
         res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Değerlendirme başarı ile silindi."})
 

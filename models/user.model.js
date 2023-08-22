@@ -47,7 +47,7 @@ const userSchema = new Schema({
         type: Number,
         default: 1
     },
-    wislist: [{
+    wishlist: [{
         type: Schema.Types.ObjectId,
         ref: 'Game'
     }],

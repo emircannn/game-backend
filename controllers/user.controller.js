@@ -38,6 +38,7 @@ exports.findByUsername= async (req,res)=> {
         res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
     }
 }
+
 exports.updateByUsername= async (req,res)=> {
     try {
         const isInvalid = utils.helpers.handleValidation(req)
@@ -82,5 +83,50 @@ exports.updateImage= async(req,res)=> {
     } catch (error) {
         utils.helpers.logToError(error, req)
         res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null})
+    }
+}
+
+exports.addWishlist= async(req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, ...isInvalid})
+            return
+        }
+
+        const json = await userService.addWishlist(req)
+        res.status(StatusCodes.CREATED).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Oyun istek listesine eklendi.", error: false})
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null})
+    }
+}
+
+exports.deleteWishlist= async(req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, ...isInvalid})
+            return
+        }
+
+        const json = await userService.deleteWishlist(req)
+        res.status(StatusCodes.CREATED).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Oyun istek listenizden çıkarıldı.", error: false})
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null})
+    }
+}
+
+exports.getWishlist= async (req,res)=> {
+    try {
+        const json = await userService.getWishlist(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem Başarılı"})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
     }
 }
