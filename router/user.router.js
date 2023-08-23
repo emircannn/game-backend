@@ -15,6 +15,14 @@ router.get('/getWishlist',[userValidator.validateUsername()], controller.userCon
 router.post('/addWishlist',[userValidator.validateUsername()],controller.userController.addWishlist)
 router.post('/deleteWishlist',[userValidator.validateUsername()],controller.userController.deleteWishlist)
 
+//Friends
+router.get('/getFriends',[userValidator.validateUploadLogo()], controller.userController.getFriends)
+router.get('/getFriendRequest',[userValidator.validateUploadLogo()], controller.userController.getFriendRequest)
+router.post('/addFriend',[userValidator.validateUploadLogo()], controller.userController.addFriend)
+router.post('/acceptFriend',[userValidator.validateUploadLogo()], controller.userController.acceptFriend)
+router.post('/declineFriend',[userValidator.validateUploadLogo()], controller.userController.declineFriend)
+router.post('/deleteFriend',[userValidator.validateUploadLogo()], controller.userController.deleteFriend)
+
 module.exports ={
     user: router
 }

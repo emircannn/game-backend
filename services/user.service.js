@@ -163,3 +163,84 @@ exports.getWishlist= async (req)=>{
         throw new Error(error)
     }
 }
+
+//Friends
+exports.getFriends= async (req)=>{
+    try {
+        const {id} = req.query
+
+        const json = await userDal.getFriends(id)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.getFriendRequest= async (req)=>{
+    try {
+        const {id} = req.query
+
+        const json = await userDal.getFriendRequest(id)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.addFriend= async (req)=>{
+    try {
+        const {id} = req.query
+        const {friendRequests} = req.body
+
+        if (friendRequests === id) {
+            throw new Error('Kendinize istek yollayamazsınız.')
+        }
+
+        const json = await userDal.addFriend(id, friendRequests)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.acceptFriend= async (req)=>{
+    try {
+        const {id} = req.query
+        const {friendRequests} = req.body
+
+        const json = await userDal.acceptFriend(id, friendRequests)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.declineFriend= async (req)=>{
+    try {
+        const {id} = req.query
+        const {friendRequests} = req.body
+
+        const json = await userDal.declineFriend(id, friendRequests)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.deleteFriend= async (req)=>{
+    try {
+        const {id} = req.query
+        const {friendRequests} = req.body
+
+        const json = await userDal.deleteFriend(id, friendRequests)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}

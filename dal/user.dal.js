@@ -26,6 +26,27 @@ const UserDataAccess = {
     async getWishlist(username) {
         return await User.findOne({username}).select('wishlist').populate({path: "wishlist", select: "_id name seo discountPrice coverImage bannerImage discountRate price"})
     },
+    async getFriends(id) {
+        return await User.findById(id).select('friends').populate({path: "friends", select: "_id name username image"})
+    },
+    async getFriendRequest(id) {
+        return await User.findById(id).select('friendRequests').populate({path: "friendRequests", select: "_id name username image"})
+    },
+    async addFriend(id, friendRequests) {
+        return await User.findByIdAndUpdate({_id: friendRequests}, { $push: { friendRequests: id }})
+    },
+    async acceptFriend(id, friendRequests) {
+        await User.findByIdAndUpdate({_id: id}, { $pull: { friendRequests: friendRequests }})
+        await User.findByIdAndUpdate({_id: friendRequests}, { $push: { friends: id }})
+        return await User.findByIdAndUpdate({_id: id}, { $push: { friends: friendRequests }})
+    },
+    async declineFriend(id, friendRequests) {
+        return await User.findByIdAndUpdate({_id: id}, { $pull: { friendRequests: friendRequests }})
+    },
+    async deleteFriend(id, friendRequests) {
+        await User.findByIdAndUpdate({_id: friendRequests}, { $pull: { friends: id }})
+        return await User.findByIdAndUpdate({_id: id}, { $pull: { friends: friendRequests }})
+    },
 }
 
 module.exports = UserDataAccess
