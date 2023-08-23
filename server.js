@@ -29,6 +29,7 @@ app.use(`${process.env.APP_PREFIX}${consts.router.CATEGORY}`, router.categoryRou
 app.use(`${process.env.APP_PREFIX}${consts.router.GAME}`, router.gameRouter.game)
 app.use(`${process.env.APP_PREFIX}${consts.router.REVIEW}`, router.reviewRouter.review)
 app.use(`${process.env.APP_PREFIX}${consts.router.CART}`, router.cartRouter.cart)
+app.use(`${process.env.APP_PREFIX}${consts.router.ORDER}`, router.orderRouter.order)
 
 connectToMongoDb(
     process.env.DATABASE_URL,

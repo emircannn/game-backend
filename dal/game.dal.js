@@ -1,4 +1,3 @@
-
 const Game = require('../models/game.model')
 
 const GameDataAccess = {

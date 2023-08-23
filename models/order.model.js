@@ -5,7 +5,9 @@ const Schema = mongoose.Schema
 const orderSchema = new Schema({
     subtotal: {
         type: Number,
-        required: true,
+    },
+    total: {
+        type: Number,
     },
     status: {
         type: Boolean,
@@ -13,20 +15,12 @@ const orderSchema = new Schema({
     },
     orderInfo: {
         type: String,
-        default: false,
+        default: null,
     },
-    game: {
-        type: [
-            {
-                name: {type: String, required: true},
-                id: {type: String, required: true},
-                price: {type: Number, required: true},
-                discountRate: {type: Number, required: true},
-                discountPrice: {type: Number, required: true},
-                count: {type: Number, required: true},
-            },
-        ]
-    },
+    game: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Game'
+    }],
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',

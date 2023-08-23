@@ -1,5 +1,4 @@
 const Game = require('../models/game.model')
-const User = require('../models/user.model')
 const Cart = require('../models/cart.model')
 const cartDal = require('../dal/index').cartDal
 
