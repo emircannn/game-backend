@@ -4,6 +4,7 @@ const gameController = require('./game.controller')
 const reviewController = require('./review.controller')
 const cartController = require('./cart.controller')
 const orderController = require('./order.controller')
+const authController = require('./auth.controller')
 
 module.exports={
     userController,
@@ -11,5 +12,6 @@ module.exports={
     gameController,
     reviewController,
     cartController,
-    orderController
+    orderController,
+    authController
 }

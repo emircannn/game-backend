@@ -4,6 +4,7 @@ const fs = require('fs')
 const dns = require('dns');
 const os = require('os');
 const { validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
 
 
 const createUploadDir = (str) => {
@@ -137,6 +138,21 @@ const filenameManyConverter = (files) => {
     return filesUrl
 }
 
+const createToken = (id) => {
+  return jwt.sign({id},process.env.SECRET_KEY, {
+    expiresIn: 1 * 24 * 60 * 60
+  })
+}
+
+async function comparePassword(password, hashedPassword) {
+  try {
+    const match = await bcrypt.compare(password, hashedPassword);
+    return match;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
     logToError,
     createUploadDir,
@@ -146,5 +162,7 @@ module.exports = {
     convertToSEOText,
     filenameConverter,
     filenameManyConverter,
-    deleteManyFromDisk
+    deleteManyFromDisk,
+    createToken,
+    comparePassword
 }

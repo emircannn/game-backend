@@ -1,0 +1,86 @@
+const User = require('../models/user.model')
+const userDal = require('../dal/index').userDal
+const bcrypt = require('bcrypt');
+const fileService = require('../services/file.service')
+const utils = require('../utils/index');
+const imageDto = require('../dto/userDto');
+const { createToken, comparePassword } = require('../utils/helper');
+const jwt = require('jsonwebtoken');
+
+exports.createUser= async (req)=>{
+    try {
+        const {name,email,username,password} = req.body
+
+        const hassedPassword = await bcrypt.hash(password, 12)
+
+        const user = new User({
+            name,
+            email,
+            username,
+            password: hassedPassword
+        })
+
+        const hasEmail = await User.findOne({email})
+        const hasUsername = await User.findOne({username})
+
+        if(hasEmail) {
+            throw new Error('Bu email halihazırda kullanımda')
+        }
+        if(hasUsername) {
+            throw new Error('Bu kullanıcı adı halihazırda kullanımda')
+        }
+
+        const json = await userDal.create(user)
+        const token = createToken(json._id)
+        return {json, token}
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.getUser= async (req)=>{
+    try {
+        const token = req.headers.authorization;
+        const decoded = jwt.verify(token.split(" ")[1], process.env.SECRET_KEY );
+
+        
+        if(!decoded) {
+            console.log(token, decoded, user,req)
+            return null
+        }
+
+        const user = await User.findById(decoded.id);
+        if(!user) {
+            console.log(token, decoded, user,req)
+            return null
+        }
+        return user;
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.login= async (req)=>{
+    try {
+        const {email, password} = req.body
+
+        const existUser = await User.findOne({email})
+        
+        if(!existUser) {
+            throw new Error('Böyle bir kullanıcı bulunamadı.')
+        }
+
+        const matchPassword = await comparePassword(password, existUser.password)
+
+        if(!matchPassword) {
+            throw new Error('Hatalı Şifre.')
+        }
+
+        return existUser
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}

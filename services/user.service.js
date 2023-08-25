@@ -5,37 +5,6 @@ const fileService = require('../services/file.service')
 const utils = require('../utils/index');
 const imageDto = require('../dto/userDto');
 
-exports.createUser= async (req)=>{
-    try {
-        const {name,email,username,password} = req.body
-
-        const hassedPassword = await bcrypt.hash(password, 12)
-
-        const user = new User({
-            name,
-            email,
-            username,
-            password: hassedPassword
-        })
-
-        const hasEmail = await User.findOne({email})
-        const hasUsername = await User.findOne({username})
-
-        if(hasEmail) {
-            throw new Error('Bu email halihazırda kullanımda')
-        }
-        if(hasUsername) {
-            throw new Error('Bu kullanıcı adı halihazırda kullanımda')
-        }
-
-        const json = await userDal.create(user)
-        return json
-
-    } catch (error) {
-        throw new Error(error)
-    }
-}
-
 exports.findUser= async (req)=>{
     try {
         const {userName} = req.params

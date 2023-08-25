@@ -6,7 +6,6 @@ const {userValidator} = require('../validations/index')
 
 router.get('/getAll',controller.userController.getAll)
 router.get('/getByUsername/:userName',[userValidator.validateFindByUsername()],controller.userController.findByUsername)
-router.post('/create',[userValidator.validateCreateUser()], controller.userController.createUser)
 router.post('/updateImage',[userValidator.validateUploadLogo()],controller.userController.updateImage)
 router.post('/updateByUsername/:userName',[userValidator.validateFindByUsername()],controller.userController.updateByUsername)
 

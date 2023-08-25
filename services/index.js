@@ -4,6 +4,7 @@ const gameService = require('./game.service')
 const reviewService = require('./review.service')
 const cartService = require('./cart.service')
 const orderService = require('./order.service')
+const authService = require('./auth.service')
 
 module.exports = {
     user: userService,
@@ -11,5 +12,6 @@ module.exports = {
     game: gameService,
     review: reviewService,
     cartService,
-    orderService
+    orderService,
+    authService
 }

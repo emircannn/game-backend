@@ -1,9 +1,9 @@
-const {upload} = require('../middleware/fileupload.middleware')
+const {uploadSingle} = require('../middleware/fileupload.middleware')
 const multer = require('multer');
 
 exports.uploadFile = (req, res) => {
     return new Promise((resolve, reject) => {
-        upload(req, res, async (err) => {
+        uploadSingle(req, res, async (err) => {
             if (err instanceof multer.MulterError) {
                 reject(err);
             } else if (err) {
