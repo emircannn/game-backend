@@ -2,7 +2,7 @@ const Game = require('../models/game.model')
 
 const GameDataAccess = {
     async getAllGame() {
-        return await Game.find()
+        return await Game.find().select('bannerImage name seo coverImage price discountPrice discountRate _id')
     },
     async getBySeo(seo) {
         return await Game.findOne({seo}).populate(['category', 'similarGames'])

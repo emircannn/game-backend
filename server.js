@@ -37,6 +37,7 @@ app.use(`${process.env.APP_PREFIX}${consts.router.REVIEW}`, router.reviewRouter.
 app.use(`${process.env.APP_PREFIX}${consts.router.CART}`, router.cartRouter.cart)
 app.use(`${process.env.APP_PREFIX}${consts.router.ORDER}`, router.orderRouter.order)
 app.use(`${process.env.APP_PREFIX}${consts.router.AUTH}`, router.authRouter.auth)
+app.use(`${process.env.APP_PREFIX}${consts.router.ADMIN}`, router.adminRouter.admin)
 
 connectToMongoDb(
     process.env.DATABASE_URL,

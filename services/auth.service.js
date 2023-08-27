@@ -44,16 +44,13 @@ exports.getUser= async (req)=>{
     try {
         const token = req.headers.authorization;
         const decoded = jwt.verify(token.split(" ")[1], process.env.SECRET_KEY );
-
         
         if(!decoded) {
-            console.log(token, decoded, user,req)
             return null
         }
 
         const user = await User.findById(decoded.id);
         if(!user) {
-            console.log(token, decoded, user,req)
             return null
         }
         return user;

@@ -4,6 +4,7 @@ const gameDal = require('./game.dal')
 const reviewDal = require('./review.dal')
 const cartDal = require('./cart.dal')
 const orderDal = require('./order.dal')
+const adminDal = require('./admin.dal')
 
 module.exports = {
     categoryDal,
@@ -11,5 +12,6 @@ module.exports = {
     gameDal,
     reviewDal,
     cartDal,
-    orderDal
+    orderDal,
+    adminDal
 }
