@@ -66,3 +66,21 @@ exports.login= async (req,res)=> {
         res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
     }
 }
+
+exports.dashboard= async (req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, error: true, ...isInvalid})
+            return
+        } 
+
+        const json = await authService.dashboard(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem başarılı."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}

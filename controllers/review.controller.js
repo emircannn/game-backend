@@ -14,6 +14,26 @@ exports.getAll= async (req,res)=> {
     }
 }
 
+exports.getById= async (req,res)=> {
+    try {
+
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, ...isInvalid})
+            return
+        }
+
+
+        const json = await reviewService.getById(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Değerlendirme başarılı."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
+
 exports.create= async (req,res)=> {
     try {
 
@@ -47,15 +67,6 @@ exports.getWithSeo= async (req,res)=> {
 
 exports.delete= async (req,res)=> {
     try {
-
-        const isInvalid = utils.helpers.handleValidation(req)
-
-        if(isInvalid) {
-            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, ...isInvalid})
-            return
-        }
-
-
         const json = await reviewService.delete(req)
         res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Değerlendirme başarı ile silindi."})
 

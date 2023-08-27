@@ -1,26 +1,23 @@
-const helpers = require('../utils/index').helpers
 const {StatusCodes} = require('http-status-codes')
 const consts = require('../consts/index')
+const jwt = require('jsonwebtoken')
 
 module.exports = (req,res,next) => {
     try {
-        next()
-        return
-        if(!req.url.includes('/admin')){
-            const token = req.header.authorization.split(" ")[1]
-            console.log(token)
-            const decodedToken = helpers.verifyToken(token)
-            if (decodedToken.decodedToken === null) {
-            //* 401 *//
-            return res.status(StatusCodes.UNAUTHORIZED).send({
-                message: consts.auth.UNAUHTRIZATION_MESSAGE
-            })
+            const token = req?.headers?.authorization?.split(" ")[1]
+            if (!token) {
+                return res.status(401).json({ message: 'Token bulunamadı. Yetkilendirme reddedildi.' });
             }
-            req.user=decodedToken
-            next()
-        }
 
-        next()
+            jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+                if (err) {
+                    return res.status(403).json({ message: 'Token doğrulama hatası. Yetkilendirme reddedildi.' });
+                }
+
+                req.user = decoded.id
+                next();
+            });
+
     } catch (err) {
         console.log(err)
         res.status(StatusCodes.UNAUTHORIZED).send({

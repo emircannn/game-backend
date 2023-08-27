@@ -1,4 +1,5 @@
 const User = require('../models/user.model')
+const Game = require('../models/game.model')
 const userDal = require('../dal/index').userDal
 const bcrypt = require('bcrypt');
 const fileService = require('../services/file.service')
@@ -79,6 +80,28 @@ exports.login= async (req)=>{
         }
 
         return existUser
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.dashboard= async (req)=>{
+    try {
+        const {id} = req.query
+
+        const user = await User.findById(id).select('wishlist').select('library')
+        .populate({ path: "wishlist", select: "_id name seo price discountPrice discountRate coverImage"})
+        .populate({ path: "library", select: "_id name seo price discountPrice discountRate coverImage"});
+
+        if (!user) {
+            throw new Error('Kullanıcı bulunamadı');
+        }
+
+        const lastWishlist = user.wishlist[user.wishlist.length > 0 ? user.wishlist.length - 1 : 0]
+        const lastGame = user.library[user.library.length > 0 ? user.library.length - 1 : 0];
+        
+        return {lastWishlist, lastGame}
 
     } catch (error) {
         throw new Error(error)

@@ -17,11 +17,11 @@ const UserDataAccess = {
     async getAllUsers() {
         return await User.find()
     },
-    async addWishlist(username,wishlist) {
-        return await User.findOneAndUpdate({username}, { $push: { wishlist: wishlist }})
+    async addWishlist(id,wishlist) {
+        return await User.findByIdAndUpdate({_id: id}, { $push: { wishlist: wishlist }})
     },
-    async deleteWishlist(username,wishlist) {
-        return await User.findOneAndUpdate({username}, { $pull: { wishlist: wishlist }})
+    async deleteWishlist(id,wishlist) {
+        return await User.findByIdAndUpdate({_id: id}, { $pull: { wishlist: wishlist }})
     },
     async getWishlist(username) {
         return await User.findOne({username}).select('wishlist').populate({path: "wishlist", select: "_id name seo discountPrice coverImage bannerImage discountRate price"})

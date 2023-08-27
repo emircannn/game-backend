@@ -8,9 +8,6 @@ const UserValidator = {
     validateUploadLogo () {
         return [query('id').isMongoId()]
     },
-    validateUploadLogo () {
-        return [query('id').isMongoId()]
-    },
     validateUsername () {
         return [query('username').isString()]
     },

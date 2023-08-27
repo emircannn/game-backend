@@ -75,10 +75,10 @@ exports.updateImage= async (req, res)=>{
 
 exports.addWishlist= async (req)=>{
     try {
-        const {username} = req.query
+        const {id} = req.query
         const {wishlist} = req.body
 
-        const findedUser = await User.findOne({username})
+        const findedUser = await User.findById(id)
 
         if(!findedUser) {
             throw new Error('Böyle bir kullanıcı mevcut değil')
@@ -88,7 +88,7 @@ exports.addWishlist= async (req)=>{
             throw new Error('Bu oyun zaten istek listenizde')
         }
 
-        const json = await userDal.addWishlist(username,wishlist)
+        const json = await userDal.addWishlist(id,wishlist)
         return json
 
 
@@ -99,10 +99,10 @@ exports.addWishlist= async (req)=>{
 
 exports.deleteWishlist= async (req)=>{
     try {
-        const {username} = req.query
+        const {id} = req.query
         const {wishlist} = req.body
 
-        const findedUser = await User.findOne({username})
+        const findedUser = await User.findById(id)
 
         if(!findedUser) {
             throw new Error('Böyle bir kullanıcı mevcut değil')
@@ -112,7 +112,7 @@ exports.deleteWishlist= async (req)=>{
             throw new Error('Bu oyun zaten istek listenizde değil')
         }
 
-        const json = await userDal.deleteWishlist(username,wishlist)
+        const json = await userDal.deleteWishlist(id,wishlist)
         return json
 
 

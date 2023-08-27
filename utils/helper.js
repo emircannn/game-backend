@@ -153,6 +153,20 @@ async function comparePassword(password, hashedPassword) {
   }
 }
 
+const verifyToken = (token) => {
+  const isVerify = {decodedToken: null}
+
+  try {
+      const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
+      isVerify.decodedToken = decodedToken
+  } catch (err) {
+      isVerify.decodedToken = null
+      console.log(err)
+  }
+
+  return isVerify
+}
+
 module.exports = {
     logToError,
     createUploadDir,
@@ -164,5 +178,6 @@ module.exports = {
     filenameManyConverter,
     deleteManyFromDisk,
     createToken,
-    comparePassword
+    comparePassword,
+    verifyToken
 }

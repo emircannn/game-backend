@@ -20,7 +20,7 @@ const ReviewDataAccess = {
         .populate({path: "user", select: "_id name username image"})
     },
     async delete(id) {
-        return await Review.findByIdAndDelete({_id:id})
+        return await Review.findByIdAndDelete(id)
     },
 }
 
