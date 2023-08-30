@@ -32,6 +32,8 @@ exports.verifyToken= async (req)=>{
         if(decoded.role === 'admin') {
             return true;
         }
+
+        return false;
     } catch (error) {
         throw new Error(error)
     }

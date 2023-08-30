@@ -69,7 +69,7 @@ exports.uploadImage = async (req,res)=> {
         } 
 
         const json = await gameService.uploadImage(req)
-        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Oyun Başarı ile güncellendi."})
+        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Resimler Başarı ile yüklendi."})
 
     } catch (error) {
         utils.helpers.logToError(error, req)

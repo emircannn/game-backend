@@ -11,7 +11,7 @@ router.post('/updateImage',verifyToken,[userValidator.validateUploadLogo()],cont
 router.post('/updateByUsername/:userName',verifyToken,[userValidator.validateFindByUsername()],controller.userController.updateByUsername)
 
 // Wishlist
-router.get('/getWishlist',[userValidator.validateUsername()], controller.userController.getWishlist)
+router.get('/getWishlist',verifyToken, [userValidator.validateUsername()], controller.userController.getWishlist)
 router.post('/addWishlist',verifyToken,[userValidator.validateUploadLogo()],controller.userController.addWishlist)
 router.post('/deleteWishlist',verifyToken,[userValidator.validateUploadLogo()],controller.userController.deleteWishlist)
 

@@ -16,7 +16,7 @@ const gameSchema = new Schema({
         type: String,
     },
     releaseDate: {
-        type: String,
+        type: Date,
     },
     developer: {
         type: String,

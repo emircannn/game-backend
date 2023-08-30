@@ -33,8 +33,8 @@ exports.createGame = async (req) => {
             category,recommendedSystemRequirements
         } = req.body;
 
-        const discountPrice = price - (price * discountRate/100)
-        const seo = convertToSEOText(name)
+        const discountPrice = discountRate ? price - (price * discountRate/100) : null
+        const seo = await convertToSEOText(name)
 
         const game = new Game({
             name, platform, discountRate,
@@ -106,19 +106,19 @@ exports.updateGame = async (req) => {
 
 exports.uploadImage= async (req)=>{
     try {
-        const {seo, youtubeLink} = req.query
-
+        const {seo} = req.query
+        console.log(req.files)
         const coverImage = await filenameConverter(req.files?.coverImage ? req.files?.coverImage[0]?.filename : null)
         const bannerImage = await filenameConverter(req.files?.bannerImage ? req.files?.bannerImage[0]?.filename : null)
-        const images = await filenameManyConverter(req.files.images)
+        const images = await filenameManyConverter(req.files?.images)
         const findedGame = await Game.findOne({seo})
 
-        const isDeletedCover = deleteFromDisk(findedGame.coverImage ? findedGame.coverImage.split('uploads/')[1] : '')
-        const isDeletedBanner = deleteFromDisk(findedGame.bannerImage ? findedGame.bannerImage.split('uploads/')[1] : '')
-        const isDeletedImages = deleteManyFromDisk(findedGame.images ? findedGame.images : '')
+        const isDeletedCover =req.files?.coverImage ? deleteFromDisk(findedGame.coverImage ? findedGame.coverImage.split('uploads/')[1] : '') : true
+        const isDeletedBanner =req.files?.bannerImage ? deleteFromDisk(findedGame.bannerImage ? findedGame.bannerImage.split('uploads/')[1] : '') : true
+        const isDeletedImages = req.files?.images ? deleteManyFromDisk(findedGame.images ? findedGame.images : '') : true
 
         if(isDeletedCover && isDeletedBanner && isDeletedImages) {
-            const json = gameDal.uploadImage(seo, youtubeLink,coverImage,bannerImage,images)
+            const json = gameDal.uploadImage(seo,coverImage,bannerImage,images)
             return json
         }
         throw new Error('Hata')

@@ -16,8 +16,8 @@ const GameDataAccess = {
     async delete(id) {
         return await Game.findByIdAndDelete({_id: id})
     },
-    async uploadImage(seo, youtubeLink,coverImage,bannerImage,images) {
-        return await Game.updateOne({seo}, {youtubeLink,coverImage,bannerImage,images})
+    async uploadImage(seo,coverImage,bannerImage,images) {
+        return await Game.updateOne({seo}, {coverImage,bannerImage,images})
     },
 }
 
