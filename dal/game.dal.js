@@ -5,13 +5,25 @@ const GameDataAccess = {
         return await Game.find().select('bannerImage name seo coverImage price discountPrice discountRate _id')
     },
     async getBySeo(seo) {
-        return await Game.findOne({seo}).populate(['category', 'similarGames'])
+        return await Game.findOne({seo})
+        .populate({path: 'category', select: '_id seo name'})
+        .populate({path: 'similarGames', select: '_id seo name coverImage bannerImage price discountPrice discountRate'})
     },
     async create(game) {
         return await Game.create(game)
     },
-    async update(game, seoName) {
-        return await Game.updateOne({seo: seoName}, game)
+    async update(name, platform, discountRate,
+        releaseDate, youtubeLink, discountDate,
+        developer, desc, preOrderDate,
+        stok, similarGames,discountPrice,
+        price, minimumSystemRequirements,seo,
+        category,recommendedSystemRequirements,seoName) {
+        return await Game.updateOne({seo: seoName}, {name, platform, discountRate,
+            releaseDate, youtubeLink, discountDate,
+            developer, desc, preOrderDate,
+            stok, similarGames,discountPrice,
+            price, minimumSystemRequirements,seo,
+            category,recommendedSystemRequirements}, {new: true})
     },
     async delete(id) {
         return await Game.findByIdAndDelete({_id: id})

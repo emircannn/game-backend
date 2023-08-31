@@ -115,7 +115,7 @@ const deleteManyFromDisk = (images) => {
     return success;
   };
 
-const filenameConverter = (fileName) => {
+const filenameConverter = async (fileName) => {
 
     if(!fileName) {
         return

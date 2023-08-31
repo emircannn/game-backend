@@ -16,6 +16,18 @@ exports.allGames= async ()=>{
     }
 }
 
+exports.getBySeoGame= async (req)=>{
+    try {
+        const {seoName} = req.query
+
+        const json = await adminDal.getBySeoGame(seoName)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 exports.verifyToken= async (req)=>{
     try {
         const token = req.headers.authorization;

@@ -10,7 +10,7 @@ router.get('/getBySeo',[gameValidator.validateSeo()], controller.gameController.
 router.post('/create',adminMiddleware, controller.gameController.createGame)
 router.post('/update', adminMiddleware,controller.gameController.updateGame)
 router.post('/delete',adminMiddleware,[gameValidator.validateId()], controller.gameController.deleteGame)
-router.post('/uploadImage',adminMiddleware,[gameValidator.validateSeo()],upload.fields([{name: 'coverImage', maxCount: 1},{name: 'bannerImage', maxCount: 1},{name: 'images', maxCount: 5}]), 
+router.post('/uploadImage',adminMiddleware,[gameValidator.validateSeo()],upload.fields([{name: 'coverImage', maxCount: 1},{name: 'bannerImage', maxCount: 1},{name: 'gameImages', maxCount: 5}]), 
 controller.gameController.uploadImage)
 
 
