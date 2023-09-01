@@ -91,6 +91,25 @@ const gameSchema = new Schema({
     autoIndex: true
 })
 
+gameSchema.statics.updateExpiredDiscounts = async function () {
+    try {
+      const currentDate = new Date();
+  
+      const expiredDiscounts = await this.find({ discountDate: { $lt: currentDate } });
+  
+      for (const discount of expiredDiscounts) {
+        discount.discountRate = null;
+        discount.discountPrice = null;
+        discount.discountDate = null;
+        await discount.save();
+      }
+  
+      console.log(`${expiredDiscounts.length} indirim otomatik olarak güncellendi.`);
+    } catch (error) {
+      console.error('Hata:', error);
+    }
+  };
+
 const Game = mongoose.model('Game', gameSchema, 'game')
 
 module.exports = Game

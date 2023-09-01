@@ -18,7 +18,7 @@ module.exports = (req,res,next) => {
                     req.user = decoded
                     return next();
                 }
-                return res.status(401).json({ message: 'Token doğrulama hatası. Yetkilendirme reddedildi. 2' });
+                return res.status(401).json({ message: 'Token doğrulama hatası. Yetkilendirme reddedildi.' });
             });
 
     } catch (err) {

@@ -70,8 +70,8 @@ exports.updateCategory= async (req)=>{
             const seo = convertToSEOText(name)
 
             const findedCategory = await Category.findById(id)
-            const isDeletedBanner = deleteFromDisk(findedCategory.banner && req.files?.banner ? findedCategory.banner.split('uploads/')[1] : '')
-            const isDeletedChar = deleteFromDisk(findedCategory.character && req.files?.character ? findedCategory.character.split('uploads/')[1] : '')
+            const isDeletedBanner =req.files?.banner ? deleteFromDisk(findedCategory.banner && req.files?.banner ? findedCategory.banner.split('uploads/')[1] : '') : true
+            const isDeletedChar =req.files?.character ? deleteFromDisk(findedCategory.character && req.files?.character ? findedCategory.character.split('uploads/')[1] : '') : true
 
             if(isDeletedBanner && isDeletedChar) {
                 const json = await categoryDal.updateCategory(name,id,banner,character,seo)

@@ -26,7 +26,7 @@ const GameDataAccess = {
             category,recommendedSystemRequirements}, {new: true})
     },
     async delete(id) {
-        return await Game.findByIdAndDelete({_id: id})
+        return await Game.findByIdAndDelete(id)
     },
     async uploadImage(seo,coverImage,bannerImage,images) {
         return await Game.updateOne({seo}, {coverImage,bannerImage,images})

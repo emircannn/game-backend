@@ -129,10 +129,17 @@ exports.deleteGame = async (req) => {
 
         const findedGame = await Game.findById(id)
 
-        Category.findByIdAndUpdate({_id: findedGame._id},{ $pull: { game: id }})
-        const json = await gameDal.delete(id)
+        const isDeletedCover = deleteFromDisk(findedGame.coverImage ? findedGame.coverImage.split('uploads/')[1] : '') 
+        const isDeletedBanner = deleteFromDisk(findedGame.bannerImage ? findedGame.bannerImage.split('uploads/')[1] : '')
+        const isDeletedImages =  deleteManyFromDisk(findedGame.images ? findedGame.images : '')
+        
+        if(isDeletedCover && isDeletedBanner && isDeletedImages) {
+            await Category.findByIdAndUpdate({_id: findedGame.category},{ $pull: { game: id }})
+            const json = await gameDal.delete(id)
+            return json
+        }
 
-        return json
+        throw new Error('Bir hata oluştu')
 
     } catch (error) {
         throw new Error(error.message)

@@ -75,3 +75,55 @@ exports.login= async (req,res)=> {
         res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
     }
 }
+
+exports.setDiscount= async (req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, error: true, ...isInvalid})
+            return
+        } 
+    
+        const response = await adminService.setDiscount(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "İndirim Oluşturuldu."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
+exports.discountedGames= async (req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, error: true, ...isInvalid})
+            return
+        } 
+    
+        const response = await adminService.discountedGames(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "İşlem başarılı."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
+exports.finishDiscount= async (req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, error: true, ...isInvalid})
+            return
+        } 
+    
+        const response = await adminService.finishDiscount(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "İndirim bitirildi."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}

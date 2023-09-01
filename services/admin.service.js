@@ -1,9 +1,6 @@
 const User = require('../models/user.model')
 const Game = require('../models/game.model')
 const adminDal = require('../dal/index').adminDal
-const bcrypt = require('bcrypt');
-const utils = require('../utils/index');
-const { createToken, comparePassword } = require('../utils/helper');
 const jwt = require('jsonwebtoken');
 
 exports.allGames= async ()=>{
@@ -69,5 +66,56 @@ exports.login= async (req)=>{
 
     } catch (error) {
         throw new Error(error)
+    }
+}
+
+exports.setDiscount = async (req) => {
+    try {
+        const { games, discountRate, discountDate } = req.body;
+
+        for (const id of games) {
+            const game = await Game.findOne({ _id: id });
+
+            if (game) {
+                const discountPrice = game.price - (game.price * discountRate / 100);
+                await Game.updateOne({ _id: game._id },{ discountRate, discountPrice, discountDate });
+            } 
+            else {
+                throw new Error(`ID ${id} ile eşleşen bir oyun bulunamadı.`);
+            }
+        }
+
+        return true;
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+exports.discountedGames = async (req) => {
+    try {
+        const gamesWithDiscountRate = await Game.find({
+            $or: [
+                { discountRate: { $ne: null } },
+                { discountRate: { $gt: 0 } } 
+            ]
+        })
+        .select('_id seo name coverImage name discountRate discountDate price discountPrice');
+        
+        return gamesWithDiscountRate;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
+exports.finishDiscount = async (req) => {
+    try {
+        const {id} = req.query
+        const finishDiscount = await Game.findByIdAndUpdate(id, { discountRate: null, discountPrice: null, discountDate: null}, {new: true})
+        return finishDiscount;
+
+    } catch (error) {
+        throw new Error(error.message);
     }
 }

@@ -9,6 +9,8 @@ const consts = require('./consts/index')
 const router = require('./router/index')
 const utils = require('./utils/index')
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+const Game = require('./models/game.model')
 
 configs.serverConfig.initialServerConfig()
 const PORT = process.env.PORT
@@ -48,3 +50,17 @@ connectToMongoDb(
             console.log(`listening on ${PORT}`)
         })
     })
+
+const db = mongoose.connection;
+
+db.on('error', (error) => {
+  console.error('MongoDB bağlantı hatası:', error);
+});
+
+db.once('open', () => {
+  console.log('MongoDB bağlantısı başarıyla açıldı.');
+
+  setInterval(() => {
+    Game.updateExpiredDiscounts()
+  }, 12 * 60 * 60 * 1000);
+});
