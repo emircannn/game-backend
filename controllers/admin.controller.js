@@ -14,7 +14,7 @@ exports.allGames= async (req,res)=> {
         } 
     
         const response = await adminService.allGames(req)
-        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "İşlem başarılı."})
+        res.status(StatusCodes.OK).json({...baseResponse, data: response.games,totalPages: response.totalPages, success: true, timestamp: Date.now(), message: "İşlem başarılı."})
 
     } catch (error) {
         utils.helpers.logToError(error, req)
@@ -103,7 +103,7 @@ exports.discountedGames= async (req,res)=> {
         } 
     
         const response = await adminService.discountedGames(req)
-        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "İşlem başarılı."})
+        res.status(StatusCodes.OK).json({...baseResponse, data: response.games,totalPages: response.totalPages ,success: true, timestamp: Date.now(), message: "İşlem başarılı."})
 
     } catch (error) {
         utils.helpers.logToError(error, req)

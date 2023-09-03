@@ -62,5 +62,6 @@ db.once('open', () => {
 
   setInterval(() => {
     Game.updateExpiredDiscounts()
-  }, 12 * 60 * 60 * 1000);
+    Game.updateExpiredPreOrderDate()
+  }, 6 * 60 * 60 * 1000);
 });

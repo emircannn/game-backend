@@ -47,7 +47,7 @@ exports.updateUser= async (req)=>{
 exports.getAll= async (req)=>{
     try {
         const json = await userDal.getAllUsers(req)
-        return json
+        return json ? json : [];
 
     } catch (error) {
         throw new Error(error)

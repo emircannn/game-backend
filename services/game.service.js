@@ -3,9 +3,9 @@ const Category = require('../models/category.model')
 const gameDal = require('../dal/index').gameDal
 const { filenameConverter,convertToSEOText, deleteFromDisk, filenameManyConverter, deleteManyFromDisk } = require('../utils/helper');
 
-exports.getAll = async () => {
+exports.getAll = async (req) => {
     try {
-        const json = await gameDal.getAllGame();
+        const json = await gameDal.getAllGame(req);
         return json
     } catch (error) {
         throw new Error

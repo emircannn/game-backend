@@ -1,11 +1,10 @@
-const User = require('../models/user.model')
 const Game = require('../models/game.model')
 const adminDal = require('../dal/index').adminDal
 const jwt = require('jsonwebtoken');
 
-exports.allGames= async ()=>{
+exports.allGames= async (req)=>{
     try {
-        const json = await adminDal.getAllGame()
+        const json = await adminDal.getAllGame(req)
         return json
 
     } catch (error) {
@@ -94,15 +93,26 @@ exports.setDiscount = async (req) => {
 
 exports.discountedGames = async (req) => {
     try {
-        const gamesWithDiscountRate = await Game.find({
+        const page = parseInt(req.query.page) - 1 || 0
+        const limit = 6
+        const totalGames = await Game.countDocuments({
+            $or: [
+                { discountRate: { $ne: null } },
+                { discountRate: { $gt: 0 } } 
+            ]
+    });
+        const totalPages = Math.ceil(totalGames / limit);
+        const games = await Game.find({
             $or: [
                 { discountRate: { $ne: null } },
                 { discountRate: { $gt: 0 } } 
             ]
         })
-        .select('_id seo name coverImage name discountRate discountDate price discountPrice');
+        .select('_id seo name coverImage name discountRate discountDate price discountPrice')
+        .skip(page * limit)
+        .limit(limit)
         
-        return gamesWithDiscountRate;
+        return {games, totalPages};
     } catch (error) {
         throw new Error(error.message);
     }

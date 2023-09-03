@@ -6,7 +6,7 @@ const categoryService = require('../services/index').category
 exports.getAllCategory= async (req,res)=> {
     try {
         const json = await categoryService.getAll(req)
-        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
+        res.status(StatusCodes.OK).json({...baseResponse, data: json.categories,totalPages:json.totalPages, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
 
     } catch (error) {
         utils.helpers.logToError(error, req)

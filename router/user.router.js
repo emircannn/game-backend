@@ -3,9 +3,10 @@ const router = express.Router();
 const controller = require('../controllers/index')
 const {userValidator} = require('../validations/index')
 const verifyToken = require('../middleware/auth.middleware')    
+const adminToken = require('../middleware/admin.middleware')    
 
 
-router.get('/getAll',controller.userController.getAll)
+router.get('/getAll',adminToken,controller.userController.getAll)
 router.get('/getByUsername/:userName',[userValidator.validateFindByUsername()],controller.userController.findByUsername)
 router.post('/updateImage',verifyToken,[userValidator.validateUploadLogo()],controller.userController.updateImage)
 router.post('/updateByUsername/:userName',verifyToken,[userValidator.validateFindByUsername()],controller.userController.updateByUsername)

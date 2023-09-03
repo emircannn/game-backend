@@ -109,6 +109,22 @@ gameSchema.statics.updateExpiredDiscounts = async function () {
       console.error('Hata:', error);
     }
   };
+gameSchema.statics.updateExpiredPreOrderDate = async function () {
+    try {
+      const currentDate = new Date();
+  
+      const expiredPreOrder = await this.find({ preOrderDate: { $lt: currentDate } });
+  
+      for (const game of expiredPreOrder) {
+        game.preOrderDate = null;
+        await game.save();
+      }
+  
+      console.log(`${expiredPreOrder.length} ön sipariş otomatik olarak güncellendi.`);
+    } catch (error) {
+      console.error('Hata:', error);
+    }
+  };
 
 const Game = mongoose.model('Game', gameSchema, 'game')
 

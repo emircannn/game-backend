@@ -16,6 +16,10 @@ const UserDataAccess = {
     },
     async getAllUsers() {
         return await User.find()
+        .select('image name username email createdAt wishlist library friends')
+        .populate({path: 'wishlist', select: 'coverImage name'})
+        .populate({path: 'library', select: 'coverImage name'})
+        .populate({path: 'friends', select: 'image username'})
     },
     async addWishlist(id,wishlist) {
         return await User.findByIdAndUpdate({_id: id}, { $push: { wishlist: wishlist }})

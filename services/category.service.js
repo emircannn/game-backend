@@ -2,9 +2,9 @@ const Category = require('../models/category.model')
 const categoryDal = require('../dal/index').categoryDal
 const { filenameConverter,convertToSEOText, deleteFromDisk } = require('../utils/helper');
 
-exports.getAll= async ()=>{
+exports.getAll= async (req)=>{
     try {
-        const json = await categoryDal.getAllCategory()
+        const json = await categoryDal.getAllCategory(req)
         return json
 
     } catch (error) {

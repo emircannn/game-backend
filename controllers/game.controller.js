@@ -5,8 +5,8 @@ const gameService = require('../services/index').game
 
 exports.getAllGame= async (req,res)=> {
     try {
-        const json = await gameService.getAll()
-        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
+        const json = await gameService.getAll(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: json.games,totalPages: json.totalPages, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
 
     } catch (error) {
         utils.helpers.logToError(error, req)
