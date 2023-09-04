@@ -6,6 +6,7 @@ const { upload } = require('../middleware/fileupload.middleware');
 const adminMiddleware = require('../middleware/admin.middleware')
 
 router.get('/getAll', controller.gameController.getAllGame)
+router.get('/search', controller.gameController.search)
 router.get('/getBySeo',[gameValidator.validateSeo()], controller.gameController.getBySeo)
 router.post('/create',adminMiddleware, controller.gameController.createGame)
 router.post('/update', adminMiddleware,controller.gameController.updateGame)

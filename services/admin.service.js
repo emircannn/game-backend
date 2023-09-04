@@ -1,6 +1,10 @@
 const Game = require('../models/game.model')
+const Settings = require('../models/settings.model')
+const User = require('../models/user.model')
+const Review = require('../models/review.model')
 const adminDal = require('../dal/index').adminDal
 const jwt = require('jsonwebtoken');
+const { deleteFromDisk } = require('../utils/helper');
 
 exports.allGames= async (req)=>{
     try {
@@ -124,6 +128,69 @@ exports.finishDiscount = async (req) => {
         const {id} = req.query
         const finishDiscount = await Game.findByIdAndUpdate(id, { discountRate: null, discountPrice: null, discountDate: null}, {new: true})
         return finishDiscount;
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+exports.updateSettings = async (req) => {
+    try {
+        const {name, email, phone, iban, bank, firstBanner, secondBanner} = req.body
+        const {id} = req.query
+        const json = await Settings.findByIdAndUpdate(id, {name, email, phone, iban, bank, firstBanner, secondBanner}, {new: true})
+        return json;
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+exports.getFirstBanner = async () => {
+    try {
+        const json = await Settings.find()
+        .select('firstBanner')
+        .populate({path: 'firstBanner', select: 'bannerImage seo price discountPrice discountRate discoutDate preOrderDate name discountDate'})
+        return json[0];
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+exports.getSecondBanner = async () => {
+    try {
+        const json = await Settings.find()
+        .select('secondBanner')
+        .populate({path: 'secondBanner', select: 'bannerImage seo price discountPrice discountRate discoutDate preOrderDate name discountDate'})
+        return json[0];
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+exports.deleteUser = async (req) => {
+    try {
+        const {id} = req.query
+
+        const foundedUser = await User.findById(id)
+        const reviews = foundedUser.reviews
+        const friends = foundedUser.friends
+        const isDeletedImage = deleteFromDisk(foundedUser.image ? foundedUser.image.split('uploads/')[1] : '') 
+
+        if(isDeletedImage) {
+            for (const id of reviews) {
+                await Review.findByIdAndDelete(id);
+            }
+            for (const user of friends) {
+                await User.findByIdAndUpdate({_id: user},{ $pull: { friends: id }})
+            }
+
+            const json = await User.findByIdAndDelete(id);
+            return json
+        }
+
+        throw new Error('Bir hata oluştu')
 
     } catch (error) {
         throw new Error(error.message);

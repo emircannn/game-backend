@@ -56,6 +56,25 @@ const GameDataAccess = {
     async uploadImage(seo,coverImage,bannerImage,images) {
         return await Game.updateOne({seo}, {coverImage,bannerImage,images})
     },
+    async search(req) {
+        const search = req.query.search || ""
+        const page = parseInt(req.query.page) - 1 || 0
+
+        const limit = 6
+        const totalGames = await Game.countDocuments({
+            name: { $regex: new RegExp(search, "i") }
+        })
+        const totalPages = Math.ceil(totalGames / limit);
+
+        const games = await Game.find({
+            name: { $regex: new RegExp(search, "i") }
+        })
+        .skip(page * limit)
+        .limit(limit)
+        .select('bannerImage name seo coverImage price discountPrice discountDate discountRate _id preOrderDate')
+
+        return {totalPages, games}
+    },
 }
 
 module.exports = GameDataAccess

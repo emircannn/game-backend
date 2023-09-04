@@ -127,3 +127,65 @@ exports.finishDiscount= async (req,res)=> {
         res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
     }
 }
+exports.updateSettings= async (req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, error: true, ...isInvalid})
+            return
+        } 
+    
+        const response = await adminService.updateSettings(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "Ayarlar Güncellendi."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
+
+exports.getFirstBanner= async (req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, error: true, ...isInvalid})
+            return
+        } 
+    
+        const response = await adminService.getFirstBanner(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
+exports.getSecondBanner= async (req,res)=> {
+    try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, error: true, ...isInvalid})
+            return
+        } 
+    
+        const response = await adminService.getSecondBanner(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
+exports.deleteUser= async (req,res)=> {
+    try {
+        const response = await adminService.deleteUser(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "Kullanıcı Silindi."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}

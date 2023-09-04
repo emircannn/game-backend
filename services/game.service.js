@@ -11,6 +11,14 @@ exports.getAll = async (req) => {
         throw new Error
     }
 };
+exports.search = async (req) => {
+    try {
+        const json = await gameDal.search(req);
+        return json
+    } catch (error) {
+        throw new Error
+    }
+};
 
 exports.getBySeo = async (req) => {
     try {

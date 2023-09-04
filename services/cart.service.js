@@ -22,6 +22,17 @@ exports.getUserCart = async (req) => {
     }
 };
 
+exports.cartCount = async (req) => {
+    try {
+        const {id} = req.query
+
+        const json = await cartDal.cartCount(id);
+        return json
+    } catch (error) {
+        throw new Error(error)
+    }
+};
+
 exports.addToCart = async (req) => {
     try {
 
@@ -49,19 +60,51 @@ exports.addToCart = async (req) => {
         throw new Error(error)
     }
 };
-
 exports.delete = async (req) => {
     try {
-        const {user, game} = req.body
-        const findedCart = await Cart.findOne({user})
-        const findedGame = await Game.findById(game)
+        const { user, game } = req.body;
+        const findedCart = await Cart.findOne({ user });
+        const findedGame = await Game.findById(game);
 
-        const gamePrice = findedGame.discountPrice ? findedGame.discountPrice : findedGame.price;
+        if (!findedCart || !findedGame) {
+            throw new Error('Sepet veya oyun bulunamadı.');
+        }
+
+        const gamePrice = findedGame.discountPrice || findedGame.price;
+
+        // Oyunu sepette bulunuyor mu kontrol et
+        const gameIndex = findedCart.game.findIndex(cartGame => cartGame.toString() === game);
+
+        if (gameIndex === -1) {
+            throw new Error('Oyun sepette bulunamadı.');
+        }
+
+        // Sepetin oyunlarından sil
+        findedCart.game.splice(gameIndex, 1);
+
+        // Toplam fiyatı güncelle
         const total = findedCart.total - gamePrice;
-        const subtotal = findedGame.price - findedCart.subtotal
-        return await Cart.findOneAndUpdate({ user: user }, {$pull: { game: game },$set: { total, subtotal }},{ new: true })
 
+        // Yeni subtotal hesapla (tüm oyunların fiyatlarını topla)
+        const remainingGames = await Game.find({ _id: { $in: findedCart.game } });
+        const subtotal = remainingGames.reduce((acc, cartGame) => {
+            const gamePrice = cartGame.price;
+            return acc + gamePrice;
+        }, 0);
+
+        // Sepeti güncelle
+        const updatedCart = await Cart.findOneAndUpdate(
+            { user: user },
+            { game: findedCart.game, total, subtotal },
+            { new: true }
+        );
+
+        if (!updatedCart) {
+            throw new Error('Sepet güncellenemedi.');
+        }
+
+        return updatedCart;
     } catch (error) {
-        throw new Error(error)
+        throw new Error(error.message);
     }
 };

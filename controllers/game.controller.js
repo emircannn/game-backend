@@ -13,6 +13,16 @@ exports.getAllGame= async (req,res)=> {
         res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
     }
 }
+exports.search= async (req,res)=> {
+    try {
+        const json = await gameService.search(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: json.games,totalPages: json.totalPages, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
 
 exports.getBySeo= async (req,res)=> {
     try {
