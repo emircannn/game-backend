@@ -5,8 +5,8 @@ const cartService = require('../services/index').cartService
 
 exports.getAll= async (req,res)=> {
     try {
-        const json = await cartService.getAll()
-        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
+        const json = await cartService.getAll(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: json.carts,totalPages: json.totalPages, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
 
     } catch (error) {
         utils.helpers.logToError(error, req)

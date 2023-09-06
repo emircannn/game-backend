@@ -8,6 +8,7 @@ const adminToken = require('../middleware/admin.middleware')
 
 router.get('/getAll',adminToken,controller.userController.getAll)
 router.get('/getByUsername/:userName',[userValidator.validateFindByUsername()],controller.userController.findByUsername)
+router.get('/getLibrary', [userValidator.validateUsername()], controller.userController.getLibrary)
 router.post('/updateImage',verifyToken,[userValidator.validateUploadLogo()],controller.userController.updateImage)
 router.post('/updateByUsername/:userName',verifyToken,[userValidator.validateFindByUsername()],controller.userController.updateByUsername)
 

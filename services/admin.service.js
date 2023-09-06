@@ -2,6 +2,8 @@ const Game = require('../models/game.model')
 const Settings = require('../models/settings.model')
 const User = require('../models/user.model')
 const Review = require('../models/review.model')
+const Cart = require('../models/cart.model')
+const Order = require('../models/order.model')
 const adminDal = require('../dal/index').adminDal
 const jwt = require('jsonwebtoken');
 const { deleteFromDisk } = require('../utils/helper');
@@ -185,6 +187,8 @@ exports.deleteUser = async (req) => {
             for (const user of friends) {
                 await User.findByIdAndUpdate({_id: user},{ $pull: { friends: id }})
             }
+
+            await Cart.findOneAndDelete({user: id})
 
             const json = await User.findByIdAndDelete(id);
             return json

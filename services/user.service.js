@@ -47,7 +47,7 @@ exports.updateUser= async (req)=>{
 exports.getAll= async (req)=>{
     try {
         const json = await userDal.getAllUsers(req)
-        return json ? json : [];
+        return json;
 
     } catch (error) {
         throw new Error(error)
@@ -126,6 +126,18 @@ exports.getWishlist= async (req)=>{
         const {username} = req.query
 
         const json = await userDal.getWishlist(username)
+        return json
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.getLibrary= async (req)=>{
+    try {
+        const {username} = req.query
+
+        const json = await userDal.getLibrary(username)
         return json
 
     } catch (error) {

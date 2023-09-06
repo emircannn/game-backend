@@ -43,7 +43,7 @@ exports.getAll= async (req,res)=> {
     try {
 
         const json = await userService.getAll(req)
-        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem Başarılı"})
+        res.status(StatusCodes.OK).json({...baseResponse, data: json.user,totalPages: json.totalPages ,success: true, timestamp: Date.now(), message: "İşlem Başarılı"})
 
     } catch (error) {
         utils.helpers.logToError(error, req)
@@ -114,6 +114,16 @@ exports.getWishlist= async (req,res)=> {
         res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
     }
 }
+exports.getLibrary= async (req,res)=> {
+    try {
+        const json = await userService.getLibrary(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem Başarılı"})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
 
 //Friends API
 exports.getFriends= async (req,res)=> {
@@ -140,6 +150,13 @@ exports.getFriendRequest= async (req,res)=> {
 }
 exports.addFriend= async (req,res)=> {
     try {
+        const isInvalid = utils.helpers.handleValidation(req)
+
+        if(isInvalid) {
+            res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, ...isInvalid})
+            return
+        }
+
         const json = await userService.addFriend(req)
         res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Arkadaşlık isteği gönderildi."})
 
@@ -171,7 +188,7 @@ exports.declineFriend= async (req,res)=> {
 exports.deleteFriend= async (req,res)=> {
     try {
         const json = await userService.deleteFriend(req)
-        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Arkadaşlık silindi."})
+        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "Arkadaşlardan çıkarıldı."})
 
     } catch (error) {
         utils.helpers.logToError(error, req)

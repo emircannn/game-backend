@@ -5,8 +5,8 @@ const orderService = require('../services/index').orderService
 
 exports.getAll= async (req,res)=> {
     try {
-        const json = await orderService.getAll()
-        res.status(StatusCodes.OK).json({...baseResponse, data: json, success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
+        const json = await orderService.getAll(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: json.json,totalPages: json.totalPages ,success: true, timestamp: Date.now(), message: "İşlem Başarılı."})
 
     } catch (error) {
         utils.helpers.logToError(error, req)
@@ -55,7 +55,6 @@ exports.addOrder= async (req,res)=> {
 
 exports.complateOrder= async (req,res)=> {
     try {
-
         const isInvalid = utils.helpers.handleValidation(req)
 
         if(isInvalid) {

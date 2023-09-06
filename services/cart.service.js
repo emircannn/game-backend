@@ -2,9 +2,9 @@ const Game = require('../models/game.model')
 const Cart = require('../models/cart.model')
 const cartDal = require('../dal/index').cartDal
 
-exports.getAll = async () => {
+exports.getAll = async (req) => {
     try {
-        const json = await cartDal.getAll();
+        const json = await cartDal.getAll(req);
         return json
     } catch (error) {
         throw new Error(error)
