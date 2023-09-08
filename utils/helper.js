@@ -123,7 +123,7 @@ const filenameConverter = async (fileName) => {
 
     const ip = process.env.DOMAIN
     const filePath = process.env.FILE_PATH
-    const fileString = `${ip}${process.env.PORT}${filePath}${fileName}`
+    const fileString = `${ip}${filePath}${fileName}`
 
     return fileString
 }
@@ -132,7 +132,7 @@ const filenameManyConverter = (files) => {
     const filePath = process.env.FILE_PATH
 
     const filesUrl = files?.map((file) => {
-        return  `${ip}${process.env.PORT}${filePath}${file.filename}`
+        return  `${ip}${filePath}${file.filename}`
     })
 
     return filesUrl

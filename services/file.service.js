@@ -12,7 +12,7 @@ exports.uploadFile = (req, res) => {
             const ip = process.env.DOMAIN
             const filePath = process.env.FILE_PATH
             const fileName = req.file?.filename
-            const fileString = `${ip}${process.env.PORT}${filePath}${fileName}`
+            const fileString = `${ip}${filePath}${fileName}`
             resolve(fileString)
         })
     })
