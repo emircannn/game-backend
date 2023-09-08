@@ -141,8 +141,8 @@ exports.updateSettings = async (req) => {
     try {
         const {name, email, phone, iban, bank, firstBanner, secondBanner, password} = req.body
         const {id} = req.query
-        const salt = bcrypt.genSalt(12)
-        const _password = bcrypt.hash(password, salt) 
+        const salt = password ? bcrypt.genSalt(12) : undefined
+        const _password = password ? bcrypt.hash(password, salt) : undefined
         const json = await Settings.findByIdAndUpdate(id, {name, email, phone, iban, bank, firstBanner, secondBanner, password: _password}, {new: true})
         return json;
 
