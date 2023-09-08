@@ -72,3 +72,17 @@ exports.filter =({name, category, platform, stok, minPrice, maxPrice, preOrder, 
 
     return filter;
 }
+
+exports.chatFilter = ({answered}) => {
+    const filter = {};
+
+    if (answered === 'answered') {
+        filter.isReaded = {$eq :true}
+    }
+    else if (answered === 'notanswered') {
+        filter.isReaded = {$eq :false}
+    }
+    else if (answered === 'all') {}
+
+    return filter;
+}

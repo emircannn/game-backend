@@ -43,6 +43,10 @@ exports.addToCart = async (req) => {
         const total = findedGame.discountPrice ? findedGame.discountPrice : findedGame.price
         const subtotal = findedGame.price
 
+        if(findedGame.stok <= 0) {
+            throw new Error('Bu oyun stoklarda mevcut değil')
+        }
+
         if(findedCart && findedCart.game.includes(game)) {
             throw new Error('Bu oyun zaten sepetinizde')
         }

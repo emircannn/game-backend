@@ -3,10 +3,11 @@ const Settings = require('../models/settings.model')
 const User = require('../models/user.model')
 const Review = require('../models/review.model')
 const Cart = require('../models/cart.model')
-const Order = require('../models/order.model')
 const adminDal = require('../dal/index').adminDal
 const jwt = require('jsonwebtoken');
 const { deleteFromDisk } = require('../utils/helper');
+const { reviewDal } = require('../dal/index')
+const bcrypt = require('bcrypt');
 
 exports.allGames= async (req)=>{
     try {
@@ -138,9 +139,11 @@ exports.finishDiscount = async (req) => {
 
 exports.updateSettings = async (req) => {
     try {
-        const {name, email, phone, iban, bank, firstBanner, secondBanner} = req.body
+        const {name, email, phone, iban, bank, firstBanner, secondBanner, password} = req.body
         const {id} = req.query
-        const json = await Settings.findByIdAndUpdate(id, {name, email, phone, iban, bank, firstBanner, secondBanner}, {new: true})
+        const salt = bcrypt.genSalt(12)
+        const _password = bcrypt.hash(password, salt) 
+        const json = await Settings.findByIdAndUpdate(id, {name, email, phone, iban, bank, firstBanner, secondBanner, password: _password}, {new: true})
         return json;
 
     } catch (error) {
@@ -198,5 +201,32 @@ exports.deleteUser = async (req) => {
 
     } catch (error) {
         throw new Error(error.message);
+    }
+}
+
+exports.deleteReview = async (req) => {
+    try {
+        const {id} = req.query
+        
+        const foundReview = await Review.findById(id)
+
+        await Game.findByIdAndUpdate({_id: foundReview.game},{ $pull: { reviews: id }})
+        await User.findByIdAndUpdate({_id: foundReview.user},{ $pull: { reviews: id }})
+        const json = await reviewDal.delete(foundReview._id);
+        return json
+
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
+exports.getSettings = async (req) => {
+    try {
+        
+        const json = await Settings.find()
+        return json
+
+    } catch (error) {
+        throw new Error(error.message)
     }
 }

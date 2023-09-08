@@ -189,3 +189,23 @@ exports.deleteUser= async (req,res)=> {
         res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
     }
 }
+exports.deleteReview= async (req,res)=> {
+    try {
+        const response = await adminService.deleteReview(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "Değerlendirme Silindi."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}
+exports.getSettings= async (req,res)=> {
+    try {
+        const response = await adminService.getSettings(req)
+        res.status(StatusCodes.OK).json({...baseResponse, data: response, success: true, timestamp: Date.now(), message: "Değerlendirme Silindi."})
+
+    } catch (error) {
+        utils.helpers.logToError(error, req)
+        res.status(StatusCodes.BAD_REQUEST).json({...baseResponse, success: false, timestamp: Date.now(), message: error.message, data: null, error: true})
+    }
+}

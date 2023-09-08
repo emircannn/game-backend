@@ -1,8 +1,9 @@
 const Order = require('../models/order.model')
 const User = require('../models/user.model')
-const Cart = require('../models/cart.model')
+const Cart = require('../models/cart.model');
+const Game = require('../models/game.model');
 const orderDal = require('../dal/index').orderDal
-
+const socketIoUtil = require('../utils/socket');
 exports.getAll = async (req) => {
     try {
         const json = await orderDal.getAll(req);
@@ -25,15 +26,20 @@ exports.getByUsername = async (req) => {
 exports.addOrder = async (req) => {
     try {
         const {user} = req.query
-
         const findedCart = await Cart.findOne({user})
-
         const total = findedCart.total
         const subtotal = findedCart.subtotal
         const game = findedCart.game
 
+        for (const id of game) {
+            const findedgame = await Game.findById(id)
+            await Game.findByIdAndUpdate({_id: id}, {stok: findedgame.stok - 1})
+        }
+
         const json = await orderDal.addOrder(user,total,subtotal,game);
         await Cart.findOneAndDelete({user})
+        const io = socketIoUtil.getIO()
+        io.emit('order', 'Yeni bir sipariş var var');
         return json
     } catch (error) {
         throw new Error(error)

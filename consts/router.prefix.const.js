@@ -8,6 +8,7 @@ const ROUTER_PREFIX = {
     ADMIN: 'admin',
     AUTH: 'auth',
     ORDER: 'order',
+    CHAT: 'chat',
 }
 
 module.exports = ROUTER_PREFIX
